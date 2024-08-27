@@ -27,4 +27,14 @@ public enum Status {
     public void setSituacao(String situacao) {
         this.situacao = situacao;
     }
+
+    public static Status toEnum(Integer id){
+        if(id==null) return null;
+        for(Status x : Status.values()){
+            if(id.equals(x.getId())){
+                return x;
+            }
+        }
+        throw new IllegalArgumentException("Status invalido");
+    }
 }
