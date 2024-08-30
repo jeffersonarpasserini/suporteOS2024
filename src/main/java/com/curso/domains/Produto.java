@@ -12,18 +12,19 @@ public class Produto {
     private double saldoEstoque;
     private double valorUnitario;
     private LocalDate dataCadastro;
+    private GrupoProduto grupoProduto;
     private Status status;
 
     public Produto() {
     }
 
-    public Produto(long idProduto, String descricao, double saldoEstoque,
-                   double valorUnitario, LocalDate dataCadastro, Status status) {
+    public Produto(long idProduto, String descricao, double saldoEstoque, double valorUnitario, LocalDate dataCadastro, GrupoProduto grupoProduto, Status status) {
         this.idProduto = idProduto;
         this.descricao = descricao;
         this.saldoEstoque = saldoEstoque;
         this.valorUnitario = valorUnitario;
         this.dataCadastro = dataCadastro;
+        this.grupoProduto = grupoProduto;
         this.status = status;
     }
 
@@ -65,6 +66,14 @@ public class Produto {
 
     public void setDataCadastro(LocalDate dataCadastro) {
         this.dataCadastro = dataCadastro;
+    }
+
+    public GrupoProduto getGrupoProduto() {
+        return grupoProduto;
+    }
+
+    public void setGrupoProduto(GrupoProduto grupoProduto) {
+        this.grupoProduto = grupoProduto;
     }
 
     public Status getStatus() {
