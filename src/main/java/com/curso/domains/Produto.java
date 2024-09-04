@@ -1,31 +1,69 @@
 package com.curso.domains;
 
 import com.curso.domains.enums.Status;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
+@Table(name = "produto")
 public class Produto {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_produto")
     private long idProduto;
+
+    @NotBlank @NotNull
     private String descricao;
-    private double saldoEstoque;
-    private double valorUnitario;
-    private LocalDate dataCadastro;
+
+    @NotNull
+    @Digits(integer = 15, fraction = 3)
+    private BigDecimal saldoEstoque;
+
+    @NotNull
+    @Digits(integer = 15, fraction = 3)
+    private BigDecimal valorUnitario;
+
+    @NotNull
+    @Digits(integer = 15, fraction = 2)
+    private BigDecimal valorEstoque;
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataCadastro = LocalDate.now();
+
+    @ManyToOne
+    @JoinColumn(name="idgrupoproduto")
     private GrupoProduto grupoProduto;
+
+    @Enumerated(EnumType.ORDINAL)
+    @JoinColumn(name="status")
     private Status status;
 
     public Produto() {
+        this.saldoEstoque = BigDecimal.ZERO;
+        this.valorUnitario = BigDecimal.ZERO;
+        this.valorEstoque = BigDecimal.ZERO;
+        this.status = Status.ATIVO;
     }
 
-    public Produto(long idProduto, String descricao, double saldoEstoque, double valorUnitario, LocalDate dataCadastro, GrupoProduto grupoProduto, Status status) {
+    public Produto(long idProduto, String descricao, BigDecimal saldoEstoque, BigDecimal valorUnitario,
+                   LocalDate dataCadastro, GrupoProduto grupoProduto, Status status) {
         this.idProduto = idProduto;
         this.descricao = descricao;
-        this.saldoEstoque = saldoEstoque;
+        //this.saldoEstoque = saldoEstoque;
         this.valorUnitario = valorUnitario;
         this.dataCadastro = dataCadastro;
         this.grupoProduto = grupoProduto;
         this.status = status;
+
+        this.saldoEstoque = saldoEstoque != null ? saldoEstoque : BigDecimal.ZERO;
+        this.valorEstoque = saldoEstoque != null ? saldoEstoque.multiply(valorUnitario) : BigDecimal.ZERO;
     }
 
     public long getIdProduto() {
@@ -44,19 +82,19 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public double getSaldoEstoque() {
+    public BigDecimal getSaldoEstoque() {
         return saldoEstoque;
     }
 
-    public void setSaldoEstoque(double saldoEstoque) {
+    public void setSaldoEstoque(BigDecimal saldoEstoque) {
         this.saldoEstoque = saldoEstoque;
     }
 
-    public double getValorUnitario() {
+    public BigDecimal getValorUnitario() {
         return valorUnitario;
     }
 
-    public void setValorUnitario(double valorUnitario) {
+    public void setValorUnitario(BigDecimal valorUnitario) {
         this.valorUnitario = valorUnitario;
     }
 
@@ -82,6 +120,14 @@ public class Produto {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public @NotNull @Digits(integer = 15, fraction = 2) BigDecimal getValorEstoque() {
+        return valorEstoque;
+    }
+
+    public void setValorEstoque(@NotNull @Digits(integer = 15, fraction = 2) BigDecimal valorEstoque) {
+        this.valorEstoque = valorEstoque;
     }
 
     @Override

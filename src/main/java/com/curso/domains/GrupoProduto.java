@@ -1,16 +1,29 @@
 package com.curso.domains;
 
 import com.curso.domains.enums.Status;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
+@Entity
+@Table(name="grupoproduto")
 public class GrupoProduto {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_grupoproduto")
     private int id;
+
+    @NotNull @NotBlank
     private String descricao;
+
+    @Enumerated(EnumType.ORDINAL)
+    @JoinColumn(name="status")
     private Status status;
 
     public GrupoProduto() {
+        this.status = Status.ATIVO;
     }
 
     public GrupoProduto(int id, String descricao, Status status) {
