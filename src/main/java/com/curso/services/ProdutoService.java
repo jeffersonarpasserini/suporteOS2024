@@ -27,6 +27,13 @@ public class ProdutoService {
 
     public Produto findbyId(Long id){
         Optional<Produto> obj = produtoRepo.findById(id);
-        return obj.orElse(null);
+        return obj.orElseThrow (() -> new ObjectNotFoundException("Produto não encontrado! Id: "+id));
+    }
+
+    public Produto findbyCodigoBarra(String codigoBarra){
+        Optional<Produto> obj = produtoRepo.findByCodigoBarra(codigoBarra);
+        return obj.orElseThrow(
+                () -> new ObjectNotFoundException("Produto não encontrado! CodigoBarra: "+codigoBarra)
+        );
     }
 }

@@ -68,11 +68,13 @@ public class ProdutoDTO {
         this.idProduto = idProduto;
     }
 
-    public @NotBlank(message = "O campo codigo de barras não pode estar vazio") @NotNull(message = "O campo código de barras não pode ser nulo") String getCodigoBarra() {
+    public @NotBlank(message = "O campo codigo de barras não pode estar vazio")
+    @NotNull(message = "O campo código de barras não pode ser nulo") String getCodigoBarra() {
         return codigoBarra;
     }
 
-    public void setCodigoBarra(@NotBlank(message = "O campo codigo de barras não pode estar vazio") @NotNull(message = "O campo código de barras não pode ser nulo") String codigoBarra) {
+    public void setCodigoBarra(@NotBlank(message = "O campo codigo de barras não pode estar vazio")
+                               @NotNull(message = "O campo código de barras não pode ser nulo") String codigoBarra) {
         this.codigoBarra = codigoBarra;
     }
 
