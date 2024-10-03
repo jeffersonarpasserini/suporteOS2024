@@ -20,6 +20,9 @@ public class Produto {
     private long idProduto;
 
     @NotBlank @NotNull
+    private String codigoBarra;
+
+    @NotBlank @NotNull
     private String descricao;
 
     @NotNull
@@ -52,9 +55,10 @@ public class Produto {
         this.status = Status.ATIVO;
     }
 
-    public Produto(long idProduto, String descricao, BigDecimal saldoEstoque, BigDecimal valorUnitario,
+    public Produto(long idProduto, String codigoBarra, String descricao, BigDecimal saldoEstoque, BigDecimal valorUnitario,
                    LocalDate dataCadastro, GrupoProduto grupoProduto, Status status) {
         this.idProduto = idProduto;
+        this.codigoBarra = codigoBarra;
         this.descricao = descricao;
         //this.saldoEstoque = saldoEstoque;
         this.valorUnitario = valorUnitario;
@@ -73,6 +77,10 @@ public class Produto {
     public void setIdProduto(long idProduto) {
         this.idProduto = idProduto;
     }
+
+    public String getCodigoBarra() { return codigoBarra; }
+
+    public void setCodigoBarra(String codigoBarra) { this.codigoBarra = codigoBarra; }
 
     public String getDescricao() {
         return descricao;
