@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class GrupoProdutoDTO {
 
-    private int id;
+    private Integer id;
 
     @NotNull(message = "O campo descricão não pode ser nulo")
     @NotBlank(message = "O campo descrição não pode estar vazio")
@@ -25,11 +25,11 @@ public class GrupoProdutoDTO {
         this.status = grupoProduto.getStatus().getId();
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

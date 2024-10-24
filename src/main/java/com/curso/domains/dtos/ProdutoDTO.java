@@ -14,7 +14,7 @@ import java.time.LocalDate;
 
 public class ProdutoDTO {
 
-    private long idProduto;
+    private Long idProduto;
 
     @NotBlank(message = "O campo codigo de barras não pode estar vazio")
     @NotNull(message = "O campo código de barras não pode ser nulo")
@@ -31,10 +31,6 @@ public class ProdutoDTO {
     @NotNull(message = "O campo valorUnitario não pode ser nulo")
     @Digits(integer = 15, fraction = 3)
     private BigDecimal valorUnitario;
-
-    @NotNull(message = "O campo valorEstoque não pode ser nulo")
-    @Digits(integer = 15, fraction = 2)
-    private BigDecimal valorEstoque;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCadastro = LocalDate.now();
@@ -53,18 +49,17 @@ public class ProdutoDTO {
         this.descricao = produto.getDescricao();
         this.valorUnitario = produto.getValorUnitario();
         this.saldoEstoque = produto.getSaldoEstoque();
-        this.valorEstoque = produto.getValorEstoque();
         this.dataCadastro = produto.getDataCadastro();
         this.grupoProduto = produto.getGrupoProduto().getId();
         this.descricaoGrupoProduto = produto.getGrupoProduto().getDescricao();
         this.status = produto.getStatus().getId();
     }
 
-    public long getIdProduto() {
+    public Long getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(long idProduto) {
+    public void setIdProduto(Long idProduto) {
         this.idProduto = idProduto;
     }
 
@@ -100,14 +95,6 @@ public class ProdutoDTO {
 
     public void setValorUnitario(@NotNull(message = "O campo valorUnitario não pode ser nulo") @Digits(integer = 15, fraction = 3) BigDecimal valorUnitario) {
         this.valorUnitario = valorUnitario;
-    }
-
-    public @NotNull(message = "O campo valorEstoque não pode ser nulo") @Digits(integer = 15, fraction = 2) BigDecimal getValorEstoque() {
-        return valorEstoque;
-    }
-
-    public void setValorEstoque(@NotNull(message = "O campo valorEstoque não pode ser nulo") @Digits(integer = 15, fraction = 2) BigDecimal valorEstoque) {
-        this.valorEstoque = valorEstoque;
     }
 
     public LocalDate getDataCadastro() {

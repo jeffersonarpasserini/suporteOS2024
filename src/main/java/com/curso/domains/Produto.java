@@ -1,5 +1,6 @@
 package com.curso.domains;
 
+import com.curso.domains.dtos.ProdutoDTO;
 import com.curso.domains.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -17,9 +18,10 @@ public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_produto")
-    private long idProduto;
+    private Long idProduto;
 
     @NotBlank @NotNull
+    @Column(unique = true)
     private String codigoBarra;
 
     @NotBlank @NotNull
@@ -55,26 +57,42 @@ public class Produto {
         this.status = Status.ATIVO;
     }
 
-    public Produto(long idProduto, String codigoBarra, String descricao, BigDecimal saldoEstoque, BigDecimal valorUnitario,
+    public Produto(Long idProduto, String codigoBarra, String descricao, BigDecimal saldoEstoque, BigDecimal valorUnitario,
                    LocalDate dataCadastro, GrupoProduto grupoProduto, Status status) {
         this.idProduto = idProduto;
         this.codigoBarra = codigoBarra;
         this.descricao = descricao;
-        //this.saldoEstoque = saldoEstoque;
+        this.saldoEstoque = saldoEstoque;
         this.valorUnitario = valorUnitario;
         this.dataCadastro = dataCadastro;
         this.grupoProduto = grupoProduto;
         this.status = status;
-
-        this.saldoEstoque = saldoEstoque != null ? saldoEstoque : BigDecimal.ZERO;
-        this.valorEstoque = saldoEstoque != null ? saldoEstoque.multiply(valorUnitario) : BigDecimal.ZERO;
+        this.valorEstoque = saldoEstoque.multiply(valorUnitario)
+                .setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
-    public long getIdProduto() {
+    public Produto(ProdutoDTO dto) {
+        this.idProduto = dto.getIdProduto();
+        this.codigoBarra = dto.getCodigoBarra();
+        this.descricao = dto.getDescricao();
+        this.valorUnitario = dto.getValorUnitario();
+        this.saldoEstoque = dto.getSaldoEstoque();
+        this.dataCadastro = dto.getDataCadastro();
+        this.status = Status.toEnum(dto.getStatus());;
+        //atribuição do grupoProduto
+        this.grupoProduto = new GrupoProduto();
+        this.grupoProduto.setId(dto.getGrupoProduto());
+        //arrondonda para baixo e para cima,
+        // se estiver exatamento no meio arredonda para cima
+        this.valorEstoque = dto.getSaldoEstoque().multiply(valorUnitario)
+                .setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    public Long getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(long idProduto) {
+    public void setIdProduto(Long idProduto) {
         this.idProduto = idProduto;
     }
 
