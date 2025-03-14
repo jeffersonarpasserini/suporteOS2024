@@ -20,6 +20,7 @@ public abstract class Person {
     protected Set<Integer> personType = new HashSet<>();
 
     public Person() {
+        addPersonType(PersonType.USER);
     }
 
     public Person(Long id, String firstName, String lastName, String cpf, String email,
@@ -31,7 +32,7 @@ public abstract class Person {
         this.email = email;
         this.password = password;
         this.createdAt = createdAt;
-        this.personType = personType;
+        addPersonType(PersonType.USER);
     }
 
     public Long getId() {
