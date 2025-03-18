@@ -1,52 +1,59 @@
-package com.curso.domains;
+package com.curso.domains.dtos;
 
+import com.curso.domains.Technician;
 import com.curso.domains.enums.PersonType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Entity
-@Table(name = "person")
-public abstract class Person {
+public class TechnicianDTO {
 
-    @Id //define com chave da entidade
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_person")
     protected Long id;
+
+    @NotNull(message = "O campo nome não pode ser nulo")
+    @NotBlank(message = "O campo nome não pode ser vazio")
     protected String firstName;
+
+    @NotNull(message = "O campo sobrenome não pode ser nulo")
+    @NotBlank(message = "O campo sobrenome não pode ser vazio")
     protected String lastName;
 
-    @Column(unique = true)
+    @NotNull(message = "O campo CPF não pode ser nulo")
+    @CPF
     protected String cpf;
 
-    @Column(unique = true)
+    @NotNull(message = "O campo e-mail não pode ser nulo")
+    @NotBlank(message = "O campo e-mail não pode ser vazio")
     protected String email;
+
+    @NotNull(message = "O campo senha não pode ser nulo")
+    @NotBlank(message = "O campo senha não pode ser vazio")
     protected String password;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     protected LocalDate createdAt = LocalDate.now();
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "perfis")
     protected Set<Integer> personType = new HashSet<>();
 
-    public Person() {
-        addPersonType(PersonType.USER);
+    public TechnicianDTO() {
     }
 
-    public Person(Long id, String firstName, String lastName, String cpf, String email,
-                  String password) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.cpf = cpf;
-        this.email = email;
-        this.password = password;
-        addPersonType(PersonType.USER);
+    public TechnicianDTO(Technician obj) {
+        this.id = obj.getId();
+        this.firstName = obj.getFirstName();
+        this.lastName = obj.getLastName();
+        this.cpf = obj.getCpf();
+        this.email = obj.getEmail();
+        this.password = obj.getPassword();
+        this.createdAt = obj.getCreatedAt();
+        this.personType.stream().map(PersonType::toEnum).collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -106,22 +113,11 @@ public abstract class Person {
     }
 
     public Set<PersonType> getPersonType() {
-        return personType.stream().map(PersonType::toEnum).collect(Collectors.toSet());
+        return personType == null ? Collections.emptySet() :
+                personType.stream().map(PersonType::toEnum).collect(Collectors.toSet());
     }
 
     public void addPersonType(PersonType personType) {
         this.personType.add(personType.getId());
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Person person = (Person) o;
-        return Objects.equals(id, person.id) && Objects.equals(cpf, person.cpf);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cpf);
     }
 }
