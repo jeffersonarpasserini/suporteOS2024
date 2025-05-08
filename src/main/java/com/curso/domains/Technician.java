@@ -7,10 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -21,8 +19,16 @@ public class Technician extends Person {
     @OneToMany(mappedBy = "technician") // technician é o nome do atributo em ServiceOrder
     private List<ServiceOrder> serviceOrders = new ArrayList<>();
 
-    public Technician(Long id, String firstName, String lastName, String cpf, String email, String password) {
+    public Technician(Long id, String firstName, String lastName, String cpf, String email,
+                      String password) {
         super(id, firstName, lastName, cpf, email, password);
+        addPersonType(PersonType.USER);
+        addPersonType(PersonType.TECHNICIAN);
+    }
+
+    public Technician(){
+        super();
+        addPersonType(PersonType.USER);
         addPersonType(PersonType.TECHNICIAN);
     }
 
@@ -37,11 +43,6 @@ public class Technician extends Person {
         this.personType = obj.getPersonType().stream()
                 .map(x -> x.getId()).collect(Collectors.toSet());
         addPersonType(PersonType.USER);
-        addPersonType(PersonType.TECHNICIAN);
-    }
-
-    public Technician(){
-        super();
         addPersonType(PersonType.TECHNICIAN);
     }
 

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.br.CPF;
-
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,19 +31,15 @@ public class UserDTO {
     @NotNull(message = "O campo e-mail não pode ser nulo")
     @NotBlank(message = "O campo e-mail não pode ser vazio")
     protected String email;
-
     @NotNull(message = "O campo senha não pode ser nulo")
     @NotBlank(message = "O campo senha não pode ser vazio")
     protected String password;
-
     @JsonFormat(pattern = "dd/MM/yyyy")
     protected LocalDate createdAt = LocalDate.now();
-
     protected Set<Integer> personType = new HashSet<>();
 
     public UserDTO() {
     }
-
     public UserDTO(User obj) {
         this.id = obj.getId();
         this.firstName = obj.getFirstName();
@@ -53,7 +48,9 @@ public class UserDTO {
         this.email = obj.getEmail();
         this.password = obj.getPassword();
         this.createdAt = obj.getCreatedAt();
-        this.personType.stream().map(PersonType::toEnum).collect(Collectors.toSet());
+        this.personType = obj.getPersonType().stream()
+                             .map(PersonType::getId)
+                             .collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -114,11 +111,11 @@ public class UserDTO {
 
     public Set<PersonType> getPersonType() {
         return personType == null ? Collections.emptySet() :
-                personType.stream().map(PersonType::toEnum).collect(Collectors.toSet());
+                personType.stream().map(PersonType::toEnum)
+                        .collect(Collectors.toSet());
     }
 
     public void addPersonType(PersonType personType) {
         this.personType.add(personType.getId());
     }
-
 }
