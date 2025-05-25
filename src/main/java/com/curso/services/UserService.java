@@ -4,6 +4,7 @@ import com.curso.domains.User;
 import com.curso.domains.dtos.UserDTO;
 import com.curso.repositories.UserRepository;
 import com.curso.services.exceptions.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import com.curso.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class UserService {
 
     @Autowired
     private UserRepository usersRepo;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     public List<UserDTO> findAll(){
         //retorna uma lista de UsersDTO
@@ -40,6 +44,7 @@ public class UserService {
 
     public User create(UserDTO objDto){
         objDto.setId(null);
+        objDto.setPassword(encoder.encode(objDto.getPassword()));
         ValidaPorCPFeEmail(objDto);
         User newObj = new User(objDto);
         return usersRepo.save(newObj);
